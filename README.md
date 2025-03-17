@@ -31,6 +31,10 @@ Before starting, ensure you have:
    - After installation, open Docker Desktop from the Start Menu.
    - Wait until Docker is fully running (its icon will appear in the system tray).
 
+4. **Get Git For Windows:** 
+   - Above is skippable if you already have git installed, if not installed go to below link and run the executable
+   - https://github.com/git-for-windows/git/releases/download/v2.49.0.windows.1/Git-2.49.0-64-bit.exe
+
 ### 2. Clone the Repository
 
 1. Open **Command Prompt** or **PowerShell**.
@@ -45,9 +49,9 @@ Before starting, ensure you have:
    docker compose up --build
 
 ### 4. Access the Services Locally
-   FastAPI: http://localhost:8000
-   Frontend: http://localhost:8001
-   PostgreSQL: Accessible on port 5432 (connect using a DB client such as pgAdmin or DBeaver)
-   Streamlit: http://localhost:8501
-   Flask: http://localhost:5001
-   Django: http://localhost:8002
+   - FastAPI: http://localhost:8000
+   - Frontend: http://localhost:8001
+   - PostgreSQL: Accessible on port 5432 (connect using a DB client such as pgAdmin or DBeaver)
+   - Streamlit: http://localhost:8501
+   - Flask: http://localhost:5001
+   - Django: http://localhost:8002
