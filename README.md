@@ -55,3 +55,9 @@ Before starting, ensure you have:
    - Streamlit: http://localhost:8501
    - Flask: http://localhost:5001
    - Django: http://localhost:8002
+
+### 5. Database info
+   - Assuming you already have a client of your choice, here is the info for our instance of PostgreSQL
+   - POSTGRES_USER: myuser
+   - POSTGRES_PASSWORD: mypassword
+   - POSTGRES_DB: mydb
