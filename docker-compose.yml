@@ -1,0 +1,69 @@
+x-postgres-env: &postgres-env
+  POSTGRES_USER: myuser
+  POSTGRES_PASSWORD: mypassword
+  POSTGRES_DB: mydb
+
+services:
+  # FastAPI backend service
+  backend:
+    build: ./backend
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      <<: *postgres-env
+
+  # Frontend static service
+  frontend:
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: python -m http.server 8001
+    ports:
+      - "8001:8001"
+
+  # PostgreSQL service
+  postgres:
+    image: postgres:13
+    environment:
+      <<: *postgres-env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # Streamlit service
+  streamlit:
+    build: ./streamlit
+    ports:
+      - "8501:8501"
+    depends_on:
+      - postgres
+    environment:
+      <<: *postgres-env
+
+  # Flask service
+  flask:
+    build: ./flask
+    ports:
+      - "5001:5000"
+    depends_on:
+      - postgres
+    environment:
+      <<: *postgres-env
+
+  # Django service
+  django:
+    build: ./django
+    ports:
+      - "8002:8000"
+    depends_on:
+      - postgres
+    environment:
+      <<: *postgres-env
+
+volumes:
+  postgres_data:

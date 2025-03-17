@@ -1,0 +1,12 @@
+# Virtual environments
+venv/
+env/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
