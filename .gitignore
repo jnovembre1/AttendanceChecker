@@ -1,12 +1,30 @@
-# Virtual environments
+# Virtual Environment
+attendanceenv/
 venv/
 env/
 
-# Python bytecode
+# Python
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
 
 # Distribution / packaging
-*.egg-info/
 dist/
 build/
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Environment variables
+.env
+
+# Windows
+*.msi
+Thumbs.db
+
+# Logs
+*.log
