@@ -2,11 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Project Frontend</title>
+  <title>Instructor Login</title>
 </head>
 <body>
-  <h1>Welcome to the Project</h1>
-  <p id="message">Loading...</p>
+  <h1>Instructor Login</h1>
+  
+  <div id="message"></div>
+
+  <form id="loginForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" required>
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+    <br>
+    <button type="submit">Login</button>
+  </form>
+  
+  <div id="result"></div>
+
   <script src="assets/script.js"></script>
 </body>
 </html>
