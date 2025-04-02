@@ -61,3 +61,7 @@ Before starting, ensure you have:
    - POSTGRES_USER: myuser
    - POSTGRES_PASSWORD: mypassword
    - POSTGRES_DB: mydb
+   - HOW TO IMPORT THE DATABASE !!!!!! 
+   - RUN THIS COMMAND IN THE PROJECT FOLDER WITHOUT THE QUOTES: "cat mydb_dump.sql | docker exec -i <postgres_container_name> psql -U myuser -d mydb"
+   - replace <postgres_container_name> with whatever the postgres container is called in your docker client
+
