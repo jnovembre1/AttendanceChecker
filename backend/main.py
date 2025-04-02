@@ -33,9 +33,9 @@ Base = declarative_base()
 
 class Instructor(Base):
     __tablename__ = "instructors"
-    id = Column(Integer, primary_key=True, index=True)
+    instructorid = Column(Integer, primary_key=True, index=True)
     username = Column(String(50), unique=True, index=True, nullable=False)
-    hashed_password = Column(String(128), nullable=False)
+    password = Column(String(128), nullable=False)
 
 Base.metadata.create_all(bind=engine)
 
@@ -57,11 +57,11 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
     
     instructor = db.query(Instructor).filter(Instructor.username == request.username).first()
     if instructor:
-        print("Instructor from DB:", instructor.username, repr(instructor.hashed_password))
+        print("Instructor from DB:", instructor.username, repr(instructor.password))
     else:
         print("No instructor found with username:", request.username)
     
-    if instructor is None or instructor.hashed_password != request.password:
+    if instructor is None or instructor.password != request.password:
         print("Invalid credentials detected")
         raise HTTPException(status_code=400, detail="Invalid username or password")
     
