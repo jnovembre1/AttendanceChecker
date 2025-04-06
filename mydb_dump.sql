@@ -102,11 +102,27 @@ CREATE TABLE public.instructors (
     instructorid integer NOT NULL,
     firstname character varying(50) NOT NULL,
     lastname character varying(50) NOT NULL,
-    profilepic bytea
+    profilepic bytea,
+    password text,
+    username text
 );
 
 
 ALTER TABLE public.instructors OWNER TO myuser;
+
+--
+-- Name: COLUMN instructors.password; Type: COMMENT; Schema: public; Owner: myuser
+--
+
+COMMENT ON COLUMN public.instructors.password IS 'login';
+
+
+--
+-- Name: COLUMN instructors.username; Type: COMMENT; Schema: public; Owner: myuser
+--
+
+COMMENT ON COLUMN public.instructors.username IS 'login username';
+
 
 --
 -- Name: instructors_instructorid_seq; Type: SEQUENCE; Schema: public; Owner: myuser
@@ -309,7 +325,8 @@ COPY public.courses (courseid, coursename, instructorid, meetingdays, classstart
 -- Data for Name: instructors; Type: TABLE DATA; Schema: public; Owner: myuser
 --
 
-COPY public.instructors (instructorid, firstname, lastname, profilepic) FROM stdin;
+COPY public.instructors (instructorid, firstname, lastname, profilepic, password, username) FROM stdin;
+1	professor	apple	\N	apples	admin
 \.
 
 
@@ -363,7 +380,7 @@ SELECT pg_catalog.setval('public.courses_courseid_seq', 1, false);
 -- Name: instructors_instructorid_seq; Type: SEQUENCE SET; Schema: public; Owner: myuser
 --
 
-SELECT pg_catalog.setval('public.instructors_instructorid_seq', 1, false);
+SELECT pg_catalog.setval('public.instructors_instructorid_seq', 1, true);
 
 
 --
