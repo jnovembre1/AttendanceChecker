@@ -28,3 +28,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+backend/laion400m-meta/*.parquet
+backend/*.pth
