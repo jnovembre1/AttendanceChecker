@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+*.pyc
+
+# Virtual Environment
+venv/
+ENV/
+env/
+attendanceenv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project specific
+downloaded_faces/
+*.tar
+*.parquet
+*.pth
+models/*.bin
+models/*.onnx
+models/*.pt
+!models/production_face_model.bin
+
+# Testing and local development
+test_db.py
+check_tables.py
+*.sqlite
+*.sqlite3
+*.db
+
+# Google Drive cache
+.tmp.drivedownload/
+.tmp.driveupload/
+
+# Environment variables
+.env
+
+# Alembic
+# We want to track migrations but ignore the __pycache__
+alembic/__pycache__/
+alembic/versions/__pycache__/
