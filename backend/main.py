@@ -14,7 +14,7 @@ import jwt
 
 from database import SessionLocal
 from models import Students as Student, Instructors as Instructor, Courses as Course, Attendance, StudentCourses
-from schemas import Token, AttendanceCreate
+from schemas import Token, TokenData, AttendanceCreate, AttendanceResponse, Student as StudentSchema, Instructor as InstructorSchema, Course as CourseSchema
 
 # Configure logging
 logging.basicConfig(
@@ -71,10 +71,11 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         if username is None:
             logger.error("Token payload missing subject")
             raise credentials_exception
+        token_data = TokenData(username=username, instructorid=payload.get("instructorid"))
     except jwt.PyJWTError:
         logger.exception("JWT decoding failed")
         raise credentials_exception
-    user = db.query(Instructor).filter(Instructor.username == username).first()
+    user = db.query(Instructor).filter(Instructor.username == token_data.username).first()
     if user is None:
         logger.error("User not found for username from token")
         raise credentials_exception
@@ -96,11 +97,14 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
         logger.warning(f"Invalid login attempt for username: {form_data.username}")
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": user.username}, expires_delta=access_token_expires)
+    access_token = create_access_token(
+        data={"sub": user.username, "instructorid": user.instructorid},
+        expires_delta=access_token_expires
+    )
     logger.info(f"User {user.username} logged in successfully")
     return {"access_token": access_token, "token_type": "bearer"}
 
-@app.post("/attendance/verify")
+@app.post("/attendance/verify", response_model=AttendanceResponse)
 def verify_attendance(
     payload: AttendanceCreate,
     db: Session = Depends(get_db),
@@ -138,8 +142,8 @@ def verify_attendance(
         logger.error(f"Student {payload.studentid} is not enrolled in course {payload.courseid}")
         raise HTTPException(status_code=404, detail="Student not enrolled in this course")
     
-    # Use provided datetime or default to current UTC time
-    event_time = payload.attendance_datetime or datetime.utcnow()
+    # Use provided attendance_time or default to current UTC time
+    event_time = payload.attendance_time or datetime.utcnow()
     
     # Check if attendance already exists for this student and course for today
     today_start = datetime.combine(event_time.date(), datetime.min.time())
