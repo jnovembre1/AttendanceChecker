@@ -8,23 +8,23 @@ Base = declarative_base()
 
 class Students(Base):
     __tablename__ = "students"
-    studentid = Column(Integer, primary_key=True)
+    studentid = Column(Integer, primary_key=True, index=True)
     firstname = Column(String(50), nullable=False)
     lastname = Column(String(50), nullable=False)
     profilepic = Column(LargeBinary, nullable=True)
 
 class Instructors(Base):
     __tablename__ = "instructors"
-    instructorid = Column(Integer, primary_key=True)
+    instructorid = Column(Integer, primary_key=True, index=True)
     firstname = Column(String(50), nullable=False)
     lastname = Column(String(50), nullable=False)
     profilepic = Column(LargeBinary, nullable=True)
-    username = Column(Text, nullable=True, comment='login username')
+    username = Column(Text, nullable=True, comment='login username', unique=True)
     password = Column(Text, nullable=True, comment='login')
 
 class Courses(Base):
     __tablename__ = "courses"
-    courseid = Column(Integer, primary_key=True)
+    courseid = Column(Integer, primary_key=True, index=True)
     instructorid = Column(Integer, ForeignKey("instructors.instructorid"))
     coursename = Column(String(100), nullable=False)
     meetingdays = Column(String(50), nullable=True)

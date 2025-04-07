@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 # Import database session, models, and schemas
 from .database import SessionLocal
 from .models import Instructor, Attendance, Student, Course
-from .schemas import AttendanceCreate, Token  # Ensure Token is a Pydantic model with 'access_token' and 'token_type'
+from .schemas import AttendanceCreate, Token
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -43,8 +43,8 @@ def get_db():
     finally:
         db.close()
 
-# OAuth2 scheme for JWT tokens
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+# OAuth2 scheme for token authentication
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     """Creates a JWT access token."""
@@ -75,10 +75,6 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         logger.error("User not found for username from token")
         raise credentials_exception
     return user
-
-# -----------------------------------
-# Endpoints
-# -----------------------------------
 
 @app.get("/")
 def read_root():
@@ -146,7 +142,3 @@ def verify_attendance(
         "message": "Attendance record created successfully",
         "attendanceid": attendance_record.attendanceid
     }
-
-# Note:
-# In production, manage schema changes using Alembic (or another migration tool)
-# and remove any calls to Base.metadata.create_all().

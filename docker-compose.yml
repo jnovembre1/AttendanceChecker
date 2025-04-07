@@ -1,19 +1,25 @@
+version: '3'
+
 x-postgres-env: &postgres-env
-  POSTGRES_USER: myuser
-  POSTGRES_PASSWORD: mypassword
-  POSTGRES_DB: mydb
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: attendancechecker
 
 services:
   # FastAPI backend service
   backend:
     build: ./backend
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    command: >
+      bash -c "python setup_db.py && uvicorn main:app --host 0.0.0.0 --port 8000"
     ports:
       - "8000:8000"
     depends_on:
       - postgres
     environment:
-      <<: *postgres-env
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/attendancechecker
+      - SECRET_KEY=your_secure_secret_key_here
+    networks:
+      - app-network
 
   # Frontend static service
   frontend:
@@ -27,13 +33,15 @@ services:
 
   # PostgreSQL service
   postgres:
-    image: postgres:13
+    image: postgres:14
     environment:
       <<: *postgres-env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - app-network
 
   # Streamlit service
   streamlit:
@@ -64,6 +72,10 @@ services:
       - postgres
     environment:
       <<: *postgres-env
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   postgres_data:
