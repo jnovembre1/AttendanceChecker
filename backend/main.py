@@ -6,13 +6,13 @@ from typing import Optional
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-import jwt
+import PyJWT as jwt
 
 from sqlalchemy.orm import Session
 
 # Import database session, models, and schemas
 from .database import SessionLocal
-from .models import Instructor, Attendance, Student, Course
+from .models import Instructors as Instructor, Attendance, Students as Student, Courses as Course
 from .schemas import AttendanceCreate, Token
 
 # Setup logging
@@ -119,7 +119,7 @@ def verify_attendance(
         raise HTTPException(status_code=404, detail="Course not found")
     
     # Use provided datetime or default to current UTC time
-    event_time = payload.datetime or datetime.utcnow()
+    event_time = payload.attendance_datetime or datetime.utcnow()
     
     # Create a new attendance record
     attendance_record = Attendance(

@@ -9,4 +9,4 @@ class Token(BaseModel):
 class AttendanceCreate(BaseModel):
     studentid: int
     courseid: int
-    datetime: Optional[datetime] = None
+    attendance_datetime: Optional[datetime] = None
