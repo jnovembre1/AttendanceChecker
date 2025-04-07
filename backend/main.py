@@ -1,27 +1,7 @@
-<<<<<<< HEAD
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-import os
-
-app = FastAPI()
-
-# CORS for allowing frontend requests
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # origin
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/")
-def read_root():
-    db_user = os.getenv("POSTGRES_USER", "unknown")
-    return {"message": "yo"}
-=======
 import os
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
@@ -88,8 +68,5 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
     
     return {"message": "Login successful", "redirect": "/dashboard"}
 
-from fastapi.responses import HTMLResponse
 
 
-
->>>>>>> a94253b51376ed0b8d02ec16fe8e36faa12f1512
