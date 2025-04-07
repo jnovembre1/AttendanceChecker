@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+*.pyc
+
+# Virtual Environment
+venv/
+ENV/
+env/
+attendanceenv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Alembic
+# We want to track migrations but ignore the __pycache__
+alembic/__pycache__/
+alembic/versions/__pycache__/
+
+# Local development
+*.sqlite
+.env
+test_db.py
+check_tables.py
+

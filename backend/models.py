@@ -1,6 +1,6 @@
 # backend/models.py
 
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, LargeBinary, Time
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 
@@ -11,19 +11,25 @@ class Students(Base):
     studentid = Column(Integer, primary_key=True)
     firstname = Column(String(50), nullable=False)
     lastname = Column(String(50), nullable=False)
+    profilepic = Column(LargeBinary, nullable=True)
 
 class Instructors(Base):
     __tablename__ = "instructors"
     instructorid = Column(Integer, primary_key=True)
     firstname = Column(String(50), nullable=False)
     lastname = Column(String(50), nullable=False)
+    profilepic = Column(LargeBinary, nullable=True)
+    username = Column(Text, nullable=True, comment='login username')
+    password = Column(Text, nullable=True, comment='login')
 
 class Courses(Base):
     __tablename__ = "courses"
     courseid = Column(Integer, primary_key=True)
     instructorid = Column(Integer, ForeignKey("instructors.instructorid"))
     coursename = Column(String(100), nullable=False)
-    semester = Column(String)
+    meetingdays = Column(String(50), nullable=True)
+    classstarttime = Column(Time, nullable=True)
+    classendtime = Column(Time, nullable=True)
 
 class Location(Base):
     __tablename__ = "location"
@@ -38,9 +44,8 @@ class MeetingDays(Base):
 
 class StudentCourses(Base):
     __tablename__ = "studentcourses"
-    studentcoursesid = Column(Integer, primary_key=True)
-    studentid = Column(Integer, ForeignKey("students.studentid", ondelete="CASCADE"), nullable=False)
-    courseid = Column(Integer, ForeignKey("courses.courseid", ondelete="CASCADE"), nullable=False)
+    studentid = Column(Integer, ForeignKey("students.studentid", ondelete="CASCADE"), nullable=False, primary_key=True)
+    courseid = Column(Integer, ForeignKey("courses.courseid", ondelete="CASCADE"), nullable=False, primary_key=True)
 
 class Attendance(Base):
     __tablename__ = "attendance"
