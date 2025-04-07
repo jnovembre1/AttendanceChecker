@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
@@ -18,7 +17,6 @@ app.add_middleware(
 def read_root():
     db_user = os.getenv("POSTGRES_USER", "unknown")
     return {"message": "yo"}
-=======
 import os
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -92,4 +90,3 @@ from fastapi.responses import HTMLResponse
 
 
 
->>>>>>> a94253b51376ed0b8d02ec16fe8e36faa12f1512
