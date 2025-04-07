@@ -310,6 +310,15 @@ ALTER TABLE ONLY public.students ALTER COLUMN studentid SET DEFAULT nextval('pub
 --
 
 COPY public.attendance (attendanceid, studentid, courseid, datetime) FROM stdin;
+1	1001	1	2025-04-07 09:05:00
+2	1002	1	2025-04-07 09:01:00
+3	1003	1	2025-04-07 09:10:00
+4	1001	2	2025-04-07 11:02:00
+5	1004	2	2025-04-07 11:00:00
+6	1005	2	2025-04-07 11:07:00
+7	1002	3	2025-04-04 13:10:00
+8	1003	3	2025-04-04 13:05:00
+9	1005	3	2025-04-04 13:02:00
 \.
 
 
@@ -318,6 +327,9 @@ COPY public.attendance (attendanceid, studentid, courseid, datetime) FROM stdin;
 --
 
 COPY public.courses (courseid, coursename, instructorid, meetingdays, classstarttime, classendtime) FROM stdin;
+1	Magical Botany	1	Monday,Wednesday	09:00:00	10:30:00
+2	Time Travel Theory	2	Tuesday,Thursday	11:00:00	12:30:00
+3	Chaos in Nature	3	Friday	13:00:00	15:00:00
 \.
 
 
@@ -326,7 +338,9 @@ COPY public.courses (courseid, coursename, instructorid, meetingdays, classstart
 --
 
 COPY public.instructors (instructorid, firstname, lastname, profilepic, password, username) FROM stdin;
-1	professor	apple	\N	apples	admin
+2	Ellie	Sattler	\N	\N	\N
+3	Ian	Malcolm	\N	\N	\N
+1	Alan	Grant	\N	apples	admin
 \.
 
 
@@ -335,6 +349,9 @@ COPY public.instructors (instructorid, firstname, lastname, profilepic, password
 --
 
 COPY public.location (locationid, buildingname, roomnumber) FROM stdin;
+1	Newton Hall	101
+2	Einstein Building	202
+3	Curie Science Center	303
 \.
 
 
@@ -343,6 +360,11 @@ COPY public.location (locationid, buildingname, roomnumber) FROM stdin;
 --
 
 COPY public.meetingdays (meetingdayid, dayname) FROM stdin;
+1	Monday
+2	Tuesday
+3	Wednesday
+4	Thursday
+5	Friday
 \.
 
 
@@ -351,6 +373,15 @@ COPY public.meetingdays (meetingdayid, dayname) FROM stdin;
 --
 
 COPY public.studentcourses (studentid, courseid) FROM stdin;
+1001	1
+1002	1
+1003	1
+1001	2
+1004	2
+1005	2
+1002	3
+1003	3
+1005	3
 \.
 
 
@@ -359,6 +390,11 @@ COPY public.studentcourses (studentid, courseid) FROM stdin;
 --
 
 COPY public.students (studentid, firstname, lastname, profilepic) FROM stdin;
+1001	Harry	Potter	\N
+1002	Hermione	Granger	\N
+1003	Ron	Weasley	\N
+1004	Luna	Lovegood	\N
+1005	Neville	Longbottom	\N
 \.
 
 

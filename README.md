@@ -64,4 +64,5 @@ Before starting, ensure you have:
    - HOW TO IMPORT THE DATABASE !!!!!! 
    - RUN THIS COMMAND IN THE PROJECT FOLDER WITHOUT THE QUOTES: "cat mydb_dump.sql | docker exec -i <postgres_container_name> psql -U myuser -d mydb"
    - replace <postgres_container_name> with whatever the postgres container is called in your docker client
+   - then run the dumscript.sql query across the database to populate with fake people.
 
