@@ -5,6 +5,7 @@ from typing import Optional
 
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+<<<<<<< HEAD
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import PyJWT as jwt
 
@@ -23,6 +24,12 @@ logger = logging.getLogger(__name__)
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
+=======
+from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import sessionmaker, declarative_base, Session
+>>>>>>> c293dec8e76ef4ac356be7f91870e3cbcfc7f6df
 
 app = FastAPI()
 
@@ -121,6 +128,7 @@ def verify_attendance(
     # Use provided datetime or default to current UTC time
     event_time = payload.attendance_datetime or datetime.utcnow()
     
+<<<<<<< HEAD
     # Create a new attendance record
     attendance_record = Attendance(
         studentid=payload.studentid,
@@ -142,3 +150,9 @@ def verify_attendance(
         "message": "Attendance record created successfully",
         "attendanceid": attendance_record.attendanceid
     }
+=======
+    return {"message": "Login successful", "redirect": "/dashboard"}
+
+
+
+>>>>>>> c293dec8e76ef4ac356be7f91870e3cbcfc7f6df

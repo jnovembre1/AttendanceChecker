@@ -33,10 +33,38 @@ attendanceenv/
 *.swp
 *.swo
 
+<<<<<<< HEAD
+=======
+# Project specific
+downloaded_faces/
+*.tar
+*.parquet
+*.pth
+models/*.bin
+models/*.onnx
+models/*.pt
+!models/production_face_model.bin
+
+# Testing and local development
+test_db.py
+check_tables.py
+*.sqlite
+*.sqlite3
+*.db
+
+# Google Drive cache
+.tmp.drivedownload/
+.tmp.driveupload/
+
+# Environment variables
+.env
+
+>>>>>>> c293dec8e76ef4ac356be7f91870e3cbcfc7f6df
 # Alembic
 # We want to track migrations but ignore the __pycache__
 alembic/__pycache__/
 alembic/versions/__pycache__/
+<<<<<<< HEAD
 
 # Local development
 *.sqlite
@@ -44,3 +72,5 @@ alembic/versions/__pycache__/
 test_db.py
 check_tables.py
 
+=======
+>>>>>>> c293dec8e76ef4ac356be7f91870e3cbcfc7f6df
