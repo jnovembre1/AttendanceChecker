@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-# AttendanceChecker
-=======
 # Project Setup & Local Environment Instructions
->>>>>>> c293dec8e76ef4ac356be7f91870e3cbcfc7f6df
 
 A system for tracking student attendance using facial recognition.
 
@@ -88,11 +84,3 @@ Note: You do not need to install Python or any other dependencies manually. Dock
    - RUN THIS COMMAND IN THE PROJECT FOLDER WITHOUT THE QUOTES: "cat mydb_dump.sql | docker exec -i <postgres_container_name> psql -U myuser -d mydb"
    - replace <postgres_container_name> with whatever the postgres container is called in your docker client
 
-<<<<<<< HEAD
-## API Endpoints
-
-- `GET /`: Check if the API is running
-- `POST /login`: Authenticate an instructor
-- `POST /attendance/verify`: Record student attendance
-=======
->>>>>>> c293dec8e76ef4ac356be7f91870e3cbcfc7f6df

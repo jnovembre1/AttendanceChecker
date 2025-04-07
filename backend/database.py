@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 # Database connection URL from environment variables
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://postgres:postgres@postgres:5432/attendancechecker"
+    "postgresql://myuser:mypassword@postgres:5432/attendancechecker"
 )
 
 engine = create_engine(DATABASE_URL)

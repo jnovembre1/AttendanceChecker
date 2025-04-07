@@ -4,11 +4,29 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
+import jwt
+
+from database import SessionLocal
+from models import Students as Student, Instructors as Instructor, Courses as Course, Attendance, StudentCourses
+from schemas import Token, AttendanceCreate
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+# JWT Authentication
+SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-for-jwt")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 app = FastAPI()
 
@@ -90,7 +108,8 @@ def verify_attendance(
 ):
     """
     Protected endpoint to verify attendance.
-    Creates a new attendance record after confirming that both the student and course exist.
+    Creates a new attendance record after confirming that both the student and course exist
+    and that the student is enrolled in the course.
     """
     # Validate that the student exists
     student = db.query(Student).filter(Student.studentid == payload.studentid).first()
@@ -104,10 +123,67 @@ def verify_attendance(
         logger.error(f"Course with ID {payload.courseid} not found")
         raise HTTPException(status_code=404, detail="Course not found")
     
+    # Verify the course is taught by the current instructor
+    if course.instructorid != current_user.instructorid:
+        logger.error(f"Instructor {current_user.instructorid} is not authorized for course {payload.courseid}")
+        raise HTTPException(status_code=403, detail="Not authorized to mark attendance for this course")
+    
+    # Check if the student is enrolled in the course
+    enrollment = db.query(StudentCourses).filter(
+        StudentCourses.studentid == payload.studentid,
+        StudentCourses.courseid == payload.courseid
+    ).first()
+    
+    if not enrollment:
+        logger.error(f"Student {payload.studentid} is not enrolled in course {payload.courseid}")
+        raise HTTPException(status_code=404, detail="Student not enrolled in this course")
+    
     # Use provided datetime or default to current UTC time
     event_time = payload.attendance_datetime or datetime.utcnow()
     
-    return {"message": "Login successful", "redirect": "/dashboard"}
+    # Check if attendance already exists for this student and course for today
+    today_start = datetime.combine(event_time.date(), datetime.min.time())
+    today_end = datetime.combine(event_time.date(), datetime.max.time())
+    
+    existing_attendance = db.query(Attendance).filter(
+        Attendance.studentid == payload.studentid,
+        Attendance.courseid == payload.courseid,
+        Attendance.datetime >= today_start,
+        Attendance.datetime <= today_end
+    ).first()
+    
+    if existing_attendance:
+        logger.info(f"Student {payload.studentid} already marked present for course {payload.courseid} today")
+        return {
+            "status": "already_recorded",
+            "message": "Attendance already recorded for today",
+            "student_name": f"{student.firstname} {student.lastname}",
+            "course_name": course.coursename,
+            "timestamp": existing_attendance.datetime.isoformat()
+        }
+    
+    # Create new attendance record
+    try:
+        new_attendance = Attendance(
+            studentid=payload.studentid,
+            courseid=payload.courseid,
+            datetime=event_time
+        )
+        db.add(new_attendance)
+        db.commit()
+        logger.info(f"Attendance recorded for student {payload.studentid} in course {payload.courseid}")
+        
+        return {
+            "status": "success",
+            "message": "Attendance successfully recorded",
+            "student_name": f"{student.firstname} {student.lastname}",
+            "course_name": course.coursename,
+            "timestamp": event_time.isoformat()
+        }
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Error recording attendance: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to record attendance")
 
 
 
