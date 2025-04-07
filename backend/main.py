@@ -24,7 +24,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # JWT Authentication
-SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-for-jwt")
+SECRET_KEY = os.getenv("SECRET_KEY", "2WSm7vyP6-BnruYl4WP9b6CUKAUhj0E9jHGG5o3smcs=")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

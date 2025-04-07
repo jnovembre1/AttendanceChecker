@@ -61,7 +61,13 @@ Note: You do not need to install Python or any other dependencies manually. Dock
    ```
 
 3. Build and Run the Project Using Docker Compose
-   - In the repository root, run the following command: 
+   - If you've previously run the project, first clean up all containers and volumes to ensure a fresh start:
+   ```bash
+   docker compose down -v
+   ```
+   - This step is crucial as it removes all containers and volumes, ensuring a clean database setup.
+
+   - Then, in the repository root, build and start the project:
    ```bash
    docker compose up --build
    ```
@@ -79,8 +85,17 @@ Note: You do not need to install Python or any other dependencies manually. Dock
    - POSTGRES_USER: myuser
    - POSTGRES_PASSWORD: mypassword
    - POSTGRES_DB: mydb
-   
-   HOW TO IMPORT THE DATABASE !!!!!!
+
+   ### Important Database Notes
+   - The database schema is initialized automatically when you start the containers with a clean setup.
+   - If you encounter any database connection issues or schema problems, always start with a clean slate:
+     ```bash
+     docker compose down -v
+     docker compose up --build
+     ```
+   - This ensures the database is properly initialized with the correct schema version.
+
+   ### HOW TO IMPORT THE DATABASE (if needed)
    - RUN THIS COMMAND IN THE PROJECT FOLDER WITHOUT THE QUOTES: "cat mydb_dump.sql | docker exec -i <postgres_container_name> psql -U myuser -d mydb"
    - replace <postgres_container_name> with whatever the postgres container is called in your docker client
 

@@ -1,23 +1,22 @@
 version: '3'
 
 x-postgres-env: &postgres-env
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-  POSTGRES_DB: attendancechecker
+  POSTGRES_USER: myuser
+  POSTGRES_PASSWORD: mypassword
+  POSTGRES_DB: mydb
 
 services:
   # FastAPI backend service
   backend:
     build: ./backend
-    command: >
-      bash -c "python setup_db.py && uvicorn main:app --host 0.0.0.0 --port 8000"
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     ports:
       - "8000:8000"
     depends_on:
       - postgres
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/attendancechecker
-      - SECRET_KEY=your_secure_secret_key_here
+      <<: *postgres-env
+      SECRET_KEY: 2WSm7vyP6-BnruYl4WP9b6CUKAUhj0E9jHGG5o3smcs=
     networks:
       - app-network
 
@@ -30,10 +29,12 @@ services:
     command: python -m http.server 8001
     ports:
       - "8001:8001"
+    networks:
+      - app-network
 
   # PostgreSQL service
   postgres:
-    image: postgres:14
+    image: postgres:13
     environment:
       <<: *postgres-env
     volumes:
@@ -52,6 +53,8 @@ services:
       - postgres
     environment:
       <<: *postgres-env
+    networks:
+      - app-network
 
   # Flask service
   flask:
@@ -62,6 +65,8 @@ services:
       - postgres
     environment:
       <<: *postgres-env
+    networks:
+      - app-network
 
   # Django service
   django:
@@ -72,10 +77,12 @@ services:
       - postgres
     environment:
       <<: *postgres-env
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
 
 networks:
   app-network:
     driver: bridge
-
-volumes:
-  postgres_data:
