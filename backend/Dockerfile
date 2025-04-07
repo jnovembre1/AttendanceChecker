@@ -1,38 +1,22 @@
-<<<<<<< HEAD
-# python runtime for parent image
-FROM python:3.9-slim
-
-# working directory
-WORKDIR /app
-
-# install dependencies from requirements file
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# idk wtf this does, copys root probably into container
-COPY . .
-
-# port for webapp
-EXPOSE 8000
-
-# command for docker to boot up webserver
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
-=======
 # Use Python 3.9-slim as the base image
 FROM python:3.9-slim
 
-# Install required system packages for building dependencies (e.g., dlib)
+# Install required system packages for OpenCV and DeepFace
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    cmake \
-    pkg-config \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy requirements.txt and install Python dependencies
+# Copy requirements.txt first
 COPY requirements.txt .
+
+# Install Python dependencies
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
@@ -44,5 +28,3 @@ EXPOSE 8000
 
 # Command to start the web server (FastAPI via uvicorn)
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
-
->>>>>>> a94253b51376ed0b8d02ec16fe8e36faa12f1512
