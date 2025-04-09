@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Face Capture & Attendance</title>
+  <!-- Tailwind CSS for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded shadow-md w-full max-w-lg">
+    <h1 class="text-2xl font-bold mb-4 text-center">Face Capture & Attendance</h1>
+    
+    <!-- Student ID Input -->
+    <div class="mb-4">
+      <label for="studentId" class="block text-gray-700 font-medium mb-1">Student ID</label>
+      <input
+        id="studentId"
+        type="number"
+        placeholder="Enter Student ID"
+        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+      />
+    </div>
+    
+    <!-- Course ID Input -->
+    <div class="mb-4">
+      <label for="courseId" class="block text-gray-700 font-medium mb-1">Course ID</label>
+      <input
+        id="courseId"
+        type="number"
+        placeholder="Enter Course ID"
+        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+      />
+    </div>
+    
+    <!-- Webcam Capture -->
+    <video id="video" width="640" height="480" autoplay class="w-full border mb-4"></video>
+    <canvas id="canvas" width="640" height="480" class="hidden"></canvas>
+    
+    <!-- Action Buttons -->
+    <div class="flex justify-center space-x-4 mb-4">
+      <button id="capture-register" class="bg-blue-600 text-white px-4 py-2 rounded">
+        Register Face
+      </button>
+      <button id="capture-verify" class="bg-green-600 text-white px-4 py-2 rounded">
+        Verify Face
+      </button>
+      <button id="verify-attendance" class="bg-indigo-600 text-white px-4 py-2 rounded">
+        Verify &amp; Attend
+      </button>
+    </div>
+    
+    <hr class="mb-4">
+    
+    <!-- Manual File Upload -->
+    <div class="mb-4">
+      <label for="manualFile" class="block text-gray-700 font-medium mb-1">Manually Upload Photo</label>
+      <input
+        id="manualFile"
+        type="file"
+        accept="image/*"
+        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+      />
+    </div>
+    <div class="flex justify-center space-x-4 mb-4">
+      <button id="upload-manual" class="bg-purple-600 text-white px-4 py-2 rounded">
+        Upload Manual Photo
+      </button>
+    </div>
+    
+    <!-- Result Message -->
+    <div id="result" class="text-center text-lg text-gray-700"></div>
+  </div>
+  
+  <script src="capture.js"></script>
+</body>
+</html>

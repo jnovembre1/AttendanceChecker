@@ -1,3 +1,5 @@
+// dashboard.js
+
 document.addEventListener('DOMContentLoaded', function() {
     // Retrieve authentication details from session storage.
     const token = sessionStorage.getItem('authToken');
@@ -38,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchAttendanceData();
 
     // Set up auto-refresh every 2 minutes.
-    setInterval(fetchAttendanceData, 120000);
+    setInterval(fetchAttendanceData, 1000);
 
     // Update the "last updated" timestamp on load.
     updateTimestamp();
@@ -54,7 +56,7 @@ function setupCourseDropdown() {
         fetchAttendanceData(this.value);
     });
 
-    //static example courses for when that is built
+    // Example hard-coded courses. In a real app, you'd fetch these from the server.
     const sampleCourses = [
         { id: 1, name: 'Web Development' },
         { id: 2, name: 'Database Systems' },
@@ -69,7 +71,7 @@ function setupCourseDropdown() {
     });
 }
 
-// Initializes the Chart.js attendance chart whenever its built.
+// Initializes the Chart.js attendance chart.
 function initializeAttendanceChart() {
     const ctx = document.getElementById('attendance-chart');
     if (!ctx) return;
@@ -78,14 +80,16 @@ function initializeAttendanceChart() {
         type: 'line',
         data: {
             labels: [],
-            datasets: [{
-                label: 'Attendance Rate (%)',
-                data: [],
-                backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                borderColor: 'rgba(59, 130, 246, 1)',
-                borderWidth: 2,
-                tension: 0.4
-            }]
+            datasets: [
+                {
+                    label: 'Attendance Rate (%)',
+                    data: [],
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
         },
         options: {
             responsive: true,
@@ -109,9 +113,9 @@ function initializeAttendanceChart() {
 function updateAttendanceChart(data) {
     if (!window.attendanceChart) return;
 
-    
     const labels = [];
     const attendanceData = [];
+
 
     if (data.dailyAttendance && Array.isArray(data.dailyAttendance)) {
         data.dailyAttendance.forEach(item => {
@@ -119,7 +123,7 @@ function updateAttendanceChart(data) {
             attendanceData.push(item.rate);
         });
     } else {
-        // Use last 7 days as fallback labels.
+        // dummy data for the last 7 days. maybe.
         for (let i = 6; i >= 0; i--) {
             const date = new Date();
             date.setDate(date.getDate() - i);
@@ -135,16 +139,17 @@ function updateAttendanceChart(data) {
     window.attendanceChart.update();
 }
 
-// Fetches attendance data from the real API endpoint.
+// fetches attendance data from the endpoint.
 function fetchAttendanceData(courseId = 'all') {
     updateTimestamp();
 
     const token = sessionStorage.getItem('authToken');
     const username = sessionStorage.getItem('username');
 
-    // Build the API URL using the instructor's username.
+    // build the API URL using the instructor's username.
     let apiUrl = `http://localhost:8000/api/attendance/instructor/${username}`;
     if (courseId !== 'all') {
+        // if your attendance.py has an endpoint like /instructor/{username}/course/{courseid}
         apiUrl += `/course/${courseId}`;
     }
 
@@ -162,7 +167,7 @@ function fetchAttendanceData(courseId = 'all') {
         return response.json();
     })
     .then(data => {
-        // keys from the backend: 
+        // The keys from the backend are:
         // totalStudents, presentToday, absentToday, attendanceRate, recentActivity, dailyAttendance (optional)
         updateDashboardStats(data);
         updateActivityTable(data.recentActivity);
@@ -183,10 +188,11 @@ function fetchAttendanceData(courseId = 'all') {
 
 // Updates the dashboard stat cards.
 function updateDashboardStats(data) {
-    document.getElementById('total-students').textContent = data.totalStudents;
-    document.getElementById('present-count').textContent = data.presentToday;
-    document.getElementById('absent-count').textContent = data.absentToday;
-    document.getElementById('attendance-rate').textContent = `${data.attendanceRate}%`;
+    // Safely handle if any fields are missing
+    document.getElementById('total-students').textContent = data.totalStudents ?? 0;
+    document.getElementById('present-count').textContent = data.presentToday ?? 0;
+    document.getElementById('absent-count').textContent = data.absentToday ?? 0;
+    document.getElementById('attendance-rate').textContent = `${data.attendanceRate ?? 0}%`;
 }
 
 // Updates the recent activity table with the latest attendance records.
@@ -199,7 +205,9 @@ function updateActivityTable(activities) {
     if (activities && activities.length > 0) {
         activities.forEach(activity => {
             const row = document.createElement('tr');
+            // Convert the 'dateTime' to a local date object.
             const dateTime = activity.dateTime ? new Date(activity.dateTime) : null;
+            // Format it with toLocaleString for consistent display in local time.
             const formattedDateTime = dateTime
                 ? dateTime.toLocaleDateString() + ' ' + dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                 : '--';
@@ -228,11 +236,17 @@ function updateActivityTable(activities) {
     }
 }
 
-// Updates the "last updated" timestamp.
+// Updates the "last updated" timestamp in the UI to the current local time.
 function updateTimestamp() {
     const updateTimeElement = document.getElementById('update-time');
     if (updateTimeElement) {
         const now = new Date();
         updateTimeElement.textContent = now.toLocaleTimeString();
     }
+}
+
+// placeholder for the logout() function:
+function logout() {
+    sessionStorage.clear();
+    window.location.href = "/index.html";
 }

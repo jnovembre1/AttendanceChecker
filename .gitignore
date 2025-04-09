@@ -3,6 +3,10 @@ attendanceenv/
 venv/
 env/
 
+
+# local image folder
+images/
+
 # Python
 __pycache__/
 *.py[cod]
