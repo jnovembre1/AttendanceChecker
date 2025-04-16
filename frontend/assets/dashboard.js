@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchAttendanceData();
 
     // Set up auto-refresh every 2 minutes.
-    setInterval(fetchAttendanceData, 1000);
+    setInterval(fetchAttendanceData, 120000);
 
     // Update the "last updated" timestamp on load.
     updateTimestamp();

@@ -84,7 +84,7 @@
     });
 
     // Verify face via webcam capture.
-    btnVerify.addEventListener('click', async () => {
+    /* btnVerify.addEventListener('click', async () => {
         const studentId = studentIdInput.value.trim();
         if (!studentId) {
             setResultMessage('Please enter a student ID.');
@@ -116,7 +116,7 @@
         } else {
             setResultMessage('No "verified" property in response. Full response: ' + JSON.stringify(data));
         }
-    });
+    }); */
 
     // Verify face and mark attendance via webcam capture.
     btnVerifyAttendance.addEventListener('click', async () => {
